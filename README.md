@@ -1,6 +1,6 @@
-### arweave-archive
+# Arweave-Archive
 
-A service that captures a full-page screenshot of a webpage at a specific point in time, stores it permanently on Arweave, and lets you search/retrieve it by URL. Users pay the storage fee directly on Polygon via their wallet provider, and uploads are handled by Irys. The MATIC paid by the user on Polygon is converted by Irys into the appropriate AR to fund storage on Arweave.
+Arweave-Archive captures a full-page screenshot of a webpage, stores it permanently on Arweave network, and lets you search/retrieve it by URL. Users pay the storage fee directly on Polygon network via their wallet provider, and uploads are handled by Irys. The MATIC paid by the user on Polygon network is converted by Irys into the appropriate AR to fund storage on Arweave.
 
 ## How It Works
 
