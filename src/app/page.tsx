@@ -4,9 +4,9 @@ import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { format } from "date-fns";
-import { Loader2, Upload, Search } from "lucide-react";
+import { Loader2, Upload, Search, X } from "lucide-react";
 import { sha256 } from "js-sha256";
-import { buildArweaveTxUrl, buildArweaveExplorerUrl, queryByOriginalUrl } from "@/lib/arweave";
+import { buildArweaveTxUrl, buildArweaveExplorerUrl, queryByOriginalUrl, normalizeUrlForTag } from "@/lib/arweave";
 import { getWebIrys } from "@/lib/irys-web";
 import { formatEther } from "viem";
 import { Buffer } from "buffer";
@@ -32,6 +32,7 @@ export default function Home() {
   const { isConnected } = useAccount();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [result, setResult] = useState<{ txId: string; link: string } | null>(null);
   const [searchResults, setSearchResults] = useState<{ txId: string; capturedAt: string; pageTitle?: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -51,11 +52,13 @@ export default function Home() {
     setResult(null);
     setLoading(true);
     try {
-      console.log("[archive] start", { url });
+      const normalized = normalizeUrlForTag(url);
+      setUrl(normalized);
+      console.log("[archive] start", { url: normalized });
       const res = await fetch("/api/capture", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url: normalized }),
       });
       const json = (await res.json()) as CaptureResponse;
       if (!json.ok || !json.imageBase64 || !json.bytes) throw new Error(json.error || "capture failed");
@@ -102,14 +105,16 @@ export default function Home() {
   async function handleSearch() {
     setError(null);
     setSearchResults([]);
-    setLoading(true);
+    setSearchLoading(true);
     try {
-      const items = await queryByOriginalUrl(url);
+      const normalized = normalizeUrlForTag(url);
+      setUrl(normalized);
+      const items = await queryByOriginalUrl(normalized);
       setSearchResults(items);
     } catch (e: any) {
       setError(e?.message || "검색 실패");
     } finally {
-      setLoading(false);
+      setSearchLoading(false);
     }
   }
 
@@ -118,6 +123,13 @@ export default function Home() {
     setError(null);
     setIsFunding(true);
     try {
+      if (priceAtomic) {
+        const confirmed = window.confirm(`다음 금액으로 결제 후 업로드를 진행할까요?\n\n${formatEther(priceAtomic)} ${tokenTicker ?? "ETH"}`);
+        if (!confirmed) {
+          setIsFunding(false);
+          return;
+        }
+      }
       const webIrys = await getWebIrys();
       console.log("[upload] webIrys ready", { token: (webIrys as any)?.tokenConfig?.name });
       if (priceAtomic != null) {
@@ -135,11 +147,12 @@ export default function Home() {
 
       const capturedAtIso = new Date().toISOString();
       const data = Buffer.from(pendingCapture.imageBase64, "base64");
-      const urlHash = sha256(url);
+      const normalized = normalizeUrlForTag(url);
+      const urlHash = sha256(normalized);
       const tags = [
         { name: "Content-Type", value: pendingCapture.contentType },
         { name: "App-Name", value: "arweave-archive" },
-        { name: "Original-URL", value: url },
+        { name: "Original-URL", value: normalized },
         { name: "Url-Hash", value: urlHash },
         { name: "Captured-At", value: capturedAtIso },
         { name: "Page-Title", value: pendingCapture.title || "" },
@@ -188,10 +201,10 @@ export default function Home() {
           </button>
           <button
             onClick={handleSearch}
-            disabled={loading || !url}
+            disabled={searchLoading || !url}
             className="inline-flex items-center gap-2 border rounded-lg px-3 py-2 disabled:opacity-60"
           >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} 검색
+            {searchLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} 검색
           </button>
         </div>
         {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
@@ -226,7 +239,15 @@ export default function Home() {
       </div>
 
       {result && (
-        <div className="mt-6 bg-white border border-black/10 rounded-xl p-4">
+        <div className="mt-6 bg-white border border-black/10 rounded-xl p-4 relative">
+          <button
+            type="button"
+            aria-label="닫기"
+            onClick={() => setResult(null)}
+            className="absolute right-3 top-3 text-black/60 hover:text-black"
+          >
+            <X className="h-4 w-4" />
+          </button>
           <div className="text-sm text-black/70 mb-1">업로드 완료</div>
           <div className="text-sm mb-1 break-all">TxID: {result.txId}</div>
           <div className="flex gap-3 flex-wrap">

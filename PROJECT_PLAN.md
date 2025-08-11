@@ -82,6 +82,9 @@
 - 완료: 의존성 설치, `postinstall` 설정, RainbowKit 환경변수 반영, `/api/capture` 구현, 검색/아카이브 UI 초안
 - 진행중: 업로드 비용 표시/승인 UX, URL 정규화, 에러/로딩UX 개선
 
+보완 사항(2025-08-11):
+- 업로드 완료 카드에 닫기(X) 버튼 추가로 사용자 제어성 향상(`src/app/page.tsx`)
+
 ### Phase 2: 결제 및 업로드 연동
 - Wagmi/RainbowKit 통합으로 메타마스크 지갑 연결  
 - 캡처 결과(파일 크기)로 Irys SDK `getPrice` 연동 및 비용 표시  

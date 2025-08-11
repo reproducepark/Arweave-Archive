@@ -30,4 +30,17 @@
 
 다음: 비용 표시/확인 UX, URL 정규화 및 태그 강화, 에러/로딩 상태 세분화, 기본 안내 페이지 추가
 
+진행(2025-08-11 추가 반영):
+- URL 정규화 유틸 추가: `normalizeUrlForTag()` (`src/lib/arweave.ts`) 및 아카이브/검색/태그/해시 적용
+- 결제 전 확인(confirm) 단계 추가: 업로드 비용 표시 후 사용자 확인 처리 (`src/app/page.tsx`)
+- 로딩 상태 분리: 아카이브 로딩 vs 검색 로딩 분리(`loading`, `searchLoading`)
+- 안내 페이지 추가: `src/app/about/page.tsx`, 헤더 내 `/about` 링크 노출(`src/app/layout.tsx`)
+
+
+### UI 개선 사항
+- 업로드 완료 카드에 닫기(X) 버튼 추가: `src/app/page.tsx`
+  - 버튼 클릭 시 `setResult(null)`로 상태 초기화하여 카드 숨김
+  - 접근성: `aria-label="닫기"` 추가
+  - 스타일: 우측 상단 고정(`absolute right-3 top-3`)
+
 

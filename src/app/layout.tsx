@@ -50,6 +50,12 @@ export default function RootLayout({
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider theme={lightTheme()}>
+              <header className="px-6 py-4 border-b border-black/10">
+                <nav className="max-w-3xl mx-auto flex items-center justify-between">
+                  <a href="/" className="text-base font-medium">arweave-archive</a>
+                  <a href="/about" className="text-sm text-blue-600 underline">About</a>
+                </nav>
+              </header>
               {children}
             </RainbowKitProvider>
           </QueryClientProvider>
