@@ -1,0 +1,36 @@
+{
+  "name": "arweave-archive",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "playwright install chromium --with-deps || echo 'playwright install skipped'"
+  },
+  "dependencies": {
+    "@irys/sdk": "^0.2.11",
+    "@rainbow-me/rainbowkit": "^2.2.8",
+    "@tanstack/react-query": "^5.84.2",
+    "date-fns": "^4.1.0",
+    "ethers": "6.15.0",
+    "js-sha256": "^0.11.1",
+    "lucide-react": "^0.539.0",
+    "next": "15.4.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "viem": "^2.33.3",
+    "wagmi": "^2.16.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright": "^1.54.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
