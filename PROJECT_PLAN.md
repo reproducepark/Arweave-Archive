@@ -78,22 +78,10 @@
 - `POST /api/capture` 구현: Playwright로 URL을 받아 스크린샷 이미지와 크기 반환  
 - Arweave GraphQL 기반 검색/조회 UI 프로토타입
 
-진행 현황(2025-08-11):
-- 완료: 의존성 설치, `postinstall` 설정, RainbowKit 환경변수 반영, `/api/capture` 구현, 검색/아카이브 UI 초안
-- 진행중: 업로드 비용 표시/승인 UX, URL 정규화, 에러/로딩UX 개선
-
-보완 사항(2025-08-11):
-- 업로드 완료 카드에 닫기(X) 버튼 추가로 사용자 제어성 향상(`src/app/page.tsx`)
-
 ### Phase 2: 결제 및 업로드 연동
 - Wagmi/RainbowKit 통합으로 메타마스크 지갑 연결  
 - 캡처 결과(파일 크기)로 Irys SDK `getPrice` 연동 및 비용 표시  
 - Irys SDK `fund` 및 `upload`로 실제 Arweave 업로드 로직 완성
-
-진행 현황(2025-08-11):
-- 완료: `getPrice` 계산 후 사용자 확인 단계 구현(클라이언트 UI), `fund`/`upload` 시나리오 구성
-- 수정: WebIrys 초기화 시 `wallet.provider` 누락으로 인한 `this.wallet.getSigner is not a function` 오류 해결 (MetaMask provider 전달, `ready()` 호출)
-- 예정: 금액 디스플레이 개선, 단위 변환/네트워크별 안내
 
 ### Phase 3: End-to-End 완성 및 고도화
 - 아카이빙과 검색 파이프라인 완전 연결  
