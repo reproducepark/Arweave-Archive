@@ -43,4 +43,14 @@
   - 접근성: `aria-label="닫기"` 추가
   - 스타일: 우측 상단 고정(`absolute right-3 top-3`)
 
+### 캡처 안정화/스텔스 개선 (2025-08-11)
+- 헤드리스 탐지 회피를 위한 경량 스텔스 적용(`src/app/api/capture/route.ts`)
+  - UA를 실제 Chrome 문자열로 설정, webdriver/languages/plugins/WebGL 패치
+  - 컨텍스트 헤더 보강, 랜덤 뷰포트, 애니메이션/오버레이 제거 CSS 주입
+  - 선택적 프록시 지원: `CAPTURE_PROXY_SERVER`, `CAPTURE_PROXY_USERNAME`, `CAPTURE_PROXY_PASSWORD`
+- 전체 페이지 캡처 누락 방지
+  - 단계적 자동 스크롤 + 프레임(iframe) 순회 스크롤
+  - 내부 스크롤 컨테이너 탐지 후 끝까지 스크롤
+  - 이미지 로드 대기, networkidle 대기, reducedMotion 적용
+
 
